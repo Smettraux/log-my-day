@@ -14,7 +14,7 @@
     <ion-row>
       <ion-col>
         <ion-list>
-          <ion-item *ngFor="let trip of trips | async" (click)="openTrip(trip)">
+          <ion-item *ngFor="let trip of trips" (click)="openTrip(trip)">
             <ion-label>
               <h2>{{ trip.title }}</h2>
               <p>{{ trip.description }}</p>
