@@ -24,3 +24,27 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+
+*{
+  font-family: 'Questrial', sans-serif;
+}
+
+body{
+  padding: var(--page-padding);
+}
+
+
+.searchbar{
+  --background: var(--ion-color-secondary);
+  --placeholder-color: var(--ion-color-tertiary-shade);
+  --color: var(--ion-color-secondary-contrast);
+  --border-radius	: 4px;
+  --clear-button-color	: var(--ion-color-tertiary-shade);
+  --icon-color	: var(--ion-color-tertiary-shade);
+}
+
+ion-item{
+  --background: var(--ion-color-tertiary);
+}
