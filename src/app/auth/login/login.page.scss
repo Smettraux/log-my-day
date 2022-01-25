@@ -11,13 +11,19 @@ h1, p {
 }
 
 #container, form, p {
-    margin-top: 25%;
+    margin-top: 20%;
+    margin-left: 0;
+    margin-right: 0;
 }
 
-form {
-    padding-left: 8%;
-    padding-right: 8%;
+ion-item {
+    margin-top:20px;
 }
+
+ion-list {
+    background-color: transparent;
+}
+
 
 ion-button {
     float: right;

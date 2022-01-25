@@ -12,5 +12,38 @@
 </ion-header>
 
 <ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col><h1>ADD TRIP</h1></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+    <form>
+      <ion-list lines="none">
+        <!-- Username input -->
+        <ion-item>
+          <ion-label position="floating">Title</ion-label>
+          <ion-input
+            inputmode="text"
+            required="true"
+            name="title"
+          ></ion-input>
+        </ion-item>
 
+
+        <!-- Password input -->
+        <ion-item>
+          <ion-label position="floating">Description</ion-label>
+          <ion-textarea rows="8"></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <div class="ion-padding">
+        <!-- Submit button -->
+        <ion-button type="submit">Create</ion-button>
+      </div>
+    </form>
+  </ion-col>
+  </ion-row>
+    </ion-grid>
 </ion-content>
