@@ -1,0 +1,28 @@
+h1, p {
+    text-align: center;
+}
+
+
+#img_container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 213px;
+    height: 216px;
+}
+
+#container, form, p {
+    margin-top: 25%;
+}
+
+form {
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+ion-button {
+    float: right;
+}
+
+.ion-padding > ion-text {
+    text-align: center;
+}
