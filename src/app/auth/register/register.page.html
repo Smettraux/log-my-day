@@ -1,9 +1,70 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-grid id="container">
+  <ion-row>
+    <ion-col>
+      <div id="img_container"><img src="assets/img/register_img.png"></div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <h1 id="welcome">WELCOME !</h1>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <form #registerForm="ngForm" (submit)="createUser(registerForm)">
+        <ion-list>
+          <!-- Username input -->
+          <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input inputmode="text" #username="ngModel" required="true" name="username"
+              [(ngModel)]="registerRequest.username"></ion-input>
+          </ion-item>
 
-<ion-content>
+          <!-- Error message displayed if the username is invalid -->
+          <ion-item lines="none" *ngIf="username.invalid && username.touched">
+            <ion-text color="danger">Username is required.</ion-text>
+          </ion-item>
 
-</ion-content>
+          <!-- Password input -->
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input inputmode="text" #password="ngModel" required="true" type="password" name="password"
+              [(ngModel)]="registerRequest.password"></ion-input>
+          </ion-item>
+
+          <!-- Error message displayed if the password is invalid -->
+          <ion-item lines="none" *ngIf="password.invalid && password.touched">
+            <ion-text color="danger">Password is required.</ion-text>
+          </ion-item>
+
+          <!-- Password confirmation -->
+          <ion-item>
+            <ion-label position="floating">Confirm password</ion-label>
+            <ion-input inputmode="text" #confirmation="ngModel" required="true" type="password" name="confirmation"
+              [(ngModel)]="registerRequest.confirmation"></ion-input>
+          </ion-item>
+
+          <!-- Error message displayed if the password is invalid -->
+          <ion-item lines="none" *ngIf="confirmation.touched && password.value !== confirmation.value">
+            <ion-text color="danger">Confirmation doesn't match password.</ion-text>
+          </ion-item>
+        </ion-list>
+
+        <div class="ion-padding">
+          <!-- Submit button -->
+          <ion-button type="submit" [disabled]="registerForm.invalid">register</ion-button>
+
+          <!-- Error message displayed if the register failed -->
+          <br>
+          <br>
+          <ion-text color="danger" *ngIf="registerError">Username or password is invalid.</ion-text>
+        </div>
+      </form>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <p>Already have an account ? <a href="/login">Log in !</a></p>
+    </ion-col>
+  </ion-row>
+</ion-grid>

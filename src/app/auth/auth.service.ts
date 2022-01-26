@@ -8,6 +8,7 @@ import { AuthResponse } from "../models/auth-response";
 import { User } from "../models/user";
 import { AuthRequest } from "../models/auth-request";
 import { Storage } from "@ionic/storage-angular";
+import { RegisterRequestApi } from "../models/register-request-api";
 
 /**
  * Authentication service for login/logout.
@@ -41,7 +42,14 @@ export class AuthService {
     return this.#auth$.pipe(map((auth) => auth?.token));
   }
 
+  register$(registerRequest: RegisterRequestApi): Observable<User> {
+    const registerUrl = `${environment.apiUrl}/users`;
+    return this.http.post<User>(registerUrl, registerRequest);
+
+  }
+
   logIn$(authRequest: AuthRequest): Observable<User> {
+
     const authUrl = `${environment.apiUrl}/auth`;
     return this.http.post<AuthResponse>(authUrl, authRequest).pipe(
       // Delay the observable stream while persisting the authentication response.
