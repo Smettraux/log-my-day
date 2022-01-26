@@ -15,14 +15,18 @@ export class TripService {
 
   getTrips(search: string = ""): Observable<Trip[]> {
     
-    const url = search == "" ? `${API_URL}/trips` : `${API_URL}/trips?search=${search}`;
+    const url = search == "" ? `${API_URL}/trips` : `${API_URL}/trips?search=${search}&sort=createdAt&order=desc`;
     return this.http
     .get<TripResponse[]>(url)
     .pipe(map(this.convertTripResponseToTrip));
   }
 
+  deleteTrip(id: string): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/trips/${id}`);
+  }
+
   addTrip(trip: TripToAdd): Observable<Trip> {
-    return this.http.post<Trip>(`${API_URL}/trips`, trip);
+    return this.http.post<Trip>(`${API_URL}/trips?sort=createdAt&order=desc`, trip);
   }
 
   convertTripResponseToTrip(response: TripResponse[]): Trip[] {
@@ -30,6 +34,7 @@ export class TripService {
     response.forEach((trip: Trip) => {
       trips.push(
         {
+          id: trip.id,
           title: trip.title,
           description: trip.description,
           createdAt: trip.createdAt,

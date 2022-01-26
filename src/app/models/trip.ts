@@ -1,4 +1,5 @@
 export type Trip = {
+    id: string;
     title: string;
     description: string;
     createdAt: Date;

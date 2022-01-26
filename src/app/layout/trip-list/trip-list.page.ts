@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { ViewDidEnter } from "@ionic/angular";
+import { ViewDidEnter, AlertController, IonItemSliding } from "@ionic/angular";
 import { AuthService } from "src/app/auth/auth.service";
 import { TripService } from "src/app/services/trip.service";
 import { Trip } from "src/app/models/trip";
 import { Router } from "@angular/router";
-
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-trip-list',
@@ -23,7 +23,8 @@ export class TripListPage implements ViewDidEnter  {
     // Inject the HTTP client
     public http: HttpClient,
     private tripService: TripService,
-    private router: Router
+    private router: Router,
+    public alertController: AlertController
   ) {}
 
   ionViewDidEnter(): void {
@@ -48,5 +49,34 @@ export class TripListPage implements ViewDidEnter  {
     console.log("logging out...");
     this.auth.logOut();
     this.router.navigateByUrl("/login");
+  }
+
+  showDeleteAlert(slidingItem: IonItemSliding,tripName: string, tripId: string) {
+    this.alertController.create({
+      header: 'Delete "' + tripName + '" ?',
+      message: 'The trip will not be available anymore.',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+            slidingItem.closeOpened();
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.tripService.deleteTrip(tripId).subscribe(back => {
+              console.log(back);
+              this.trips = this.trips.filter(trip => trip.id !== tripId);
+            }, err => {
+              console.warn('Delete trip', err);
+            });
+            slidingItem.closeOpened();
+          }
+        }
+      ]
+    }).then(res => {
+      res.present();
+    });
   }
 }
