@@ -48,5 +48,11 @@
         </ion-list>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-infinite-scroll threshold="100px" (ionInfinite)="loadTrips($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </ion-row>
   </ion-grid>
 </ion-content>
