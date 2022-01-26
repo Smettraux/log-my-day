@@ -63,21 +63,6 @@ export class RegisterPage implements OnInit {
             this.router.navigateByUrl("/login");
          });
 
-
-        // addTrip():void {
-        //   let tripToAdd:TripToAdd = {
-        //     "title": this.title,
-        //     "description": this.description
-        //   }
-        //   this.tripService.addTrip(tripToAdd).subscribe(trip => {
-        //     console.log(trip);
-        //   }, err => {
-        //     console.warn("Impossible d'ajouter un voyage", err);
-        //   });
-        // }
-
-      console.log("REGISTERED LALILO");
-
     }
 
 }

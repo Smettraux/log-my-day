@@ -41,6 +41,14 @@ const routes: Routes = [
   },  {
     path: 'edit-trip',
     loadChildren: () => import('./edit-trip/edit-trip.module').then( m => m.EditTripPageModule)
+  },
+  {
+    path: 'new-place',
+    loadChildren: () => import('./new-place/new-place.module').then( m => m.NewPlacePageModule)
+  },
+  {
+    path: 'places-details',
+    loadChildren: () => import('./places-details/places-details.module').then( m => m.PlacesDetailsPageModule)
   }
 
 ];
