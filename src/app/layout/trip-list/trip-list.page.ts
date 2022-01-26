@@ -6,6 +6,8 @@ import { TripService } from "src/app/services/trip.service";
 import { Trip } from "src/app/models/trip";
 import { Router } from "@angular/router";
 import { Observable } from 'rxjs';
+import { ToastController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-trip-list',
@@ -24,8 +26,23 @@ export class TripListPage implements ViewDidEnter  {
     public http: HttpClient,
     private tripService: TripService,
     private router: Router,
-    public alertController: AlertController
-  ) {}
+    public alertController: AlertController,
+    public toastController: ToastController
+  ) {
+    // Toast if a trip has been created
+    const { show } = window.history.state;
+    if (show == "true") {
+      this.presentToast();
+    } 
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Your trip has been added successfully',
+      duration: 3000
+    });
+    toast.present();
+  }
 
   ionViewDidEnter(): void {
     this.getTrips();
