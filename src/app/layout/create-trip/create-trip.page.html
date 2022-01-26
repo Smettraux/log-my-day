@@ -18,28 +18,35 @@
     </ion-row>
     <ion-row>
       <ion-col>
-    <form>
+    <form (submit)="addTrip()">
       <ion-list lines="none">
-        <!-- Username input -->
+        <!-- Title input -->
         <ion-item>
           <ion-label position="floating">Title</ion-label>
           <ion-input
             inputmode="text"
             required="true"
             name="title"
+            [(ngModel)]="title"
+            required
           ></ion-input>
         </ion-item>
 
 
-        <!-- Password input -->
+        <!-- Description input -->
         <ion-item>
           <ion-label position="floating">Description</ion-label>
-          <ion-textarea rows="8"></ion-textarea>
+          <ion-textarea 
+            rows="8"
+            [(ngModel)]="description"
+            name="description"
+            required
+          ></ion-textarea>
         </ion-item>
       </ion-list>
 
       <div class="ion-padding">
-        <!-- Submit button -->
+        <!-- Create button -->
         <ion-button type="submit">Create</ion-button>
       </div>
     </form>

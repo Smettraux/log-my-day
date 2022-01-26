@@ -15,3 +15,8 @@ export type TripResponse = {
   "createdAt": Date,
   "updatedAt": Date
 };
+
+export type TripToAdd = {
+  "title": string,
+  "description": string
+};

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Trip, TripResponse } from '../models/trip';
+import { Trip, TripResponse, TripToAdd } from '../models/trip';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from "src/environments/environment";
@@ -20,7 +20,7 @@ export class TripService {
     .pipe(map(this.convertTripResponseToTrip));
   }
 
-  addTrip(trip: Trip): Observable<Trip> {
+  addTrip(trip: TripToAdd): Observable<Trip> {
     return this.http.post<Trip>(`${API_URL}/trips`, trip);
   }
 
