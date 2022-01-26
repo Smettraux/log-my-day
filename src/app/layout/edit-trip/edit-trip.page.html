@@ -1,9 +1,56 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>EditTrip</ion-title>
+
+    <!-- Logout button -->
+    <ion-buttons slot="end">
+      <ion-button (click)="logOut()">
+        <ion-icon name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col><h1>EDIT TRIP</h1></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+    <form (submit)="editTrip()">
+      <ion-list lines="none">
+        <!-- Title input -->
+        <ion-item>
+          <ion-label position="floating">Title</ion-label>
+          <ion-input
+            inputmode="text"
+            required="true"
+            name="title"
+            [(ngModel)]="title"
+            required
+          ></ion-input>
+        </ion-item>
 
+
+        <!-- Description input -->
+        <ion-item>
+          <ion-label position="floating">Description</ion-label>
+          <ion-textarea 
+            rows="8"
+            [(ngModel)]="description"
+            name="description"
+            required
+          ></ion-textarea>
+        </ion-item>
+      </ion-list>
+
+      <div class="ion-padding">
+        <!-- Create button -->
+        <ion-button type="submit">Edit</ion-button>
+      </div>
+    </form>
+  </ion-col>
+  </ion-row>
+    </ion-grid>
 </ion-content>
