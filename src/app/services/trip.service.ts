@@ -13,8 +13,9 @@ export class TripService {
 
   constructor(private http: HttpClient) { }
 
-  getTrips(): Observable<Trip[]> {
-    const url = `${API_URL}/trips`;
+  getTrips(search: string = ""): Observable<Trip[]> {
+    
+    const url = search == "" ? `${API_URL}/trips` : `${API_URL}/trips?search=${search}`;
     return this.http
     .get<TripResponse[]>(url)
     .pipe(map(this.convertTripResponseToTrip));

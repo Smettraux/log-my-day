@@ -1,6 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>TripList</ion-title>
+
+    <!-- Logout button -->
+    <ion-buttons slot="start">
+      <ion-button (click)="logOut()">
+        <ion-icon name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
@@ -13,7 +21,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-searchbar class="searchbar" placeholder="Search" (ionChange)="search($event)"></ion-searchbar>
+        <ion-searchbar class="searchbar" placeholder="Search" debounce="700" (ionChange)="search()" [(ngModel)]="searchingText"></ion-searchbar>
       </ion-col>
     </ion-row>
     <ion-row>
