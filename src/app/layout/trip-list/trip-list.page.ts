@@ -38,7 +38,7 @@ export class TripListPage implements ViewDidEnter  {
   async presentToast() {
     const toast = await this.toastController.create({
       message: 'Your trip has been added successfully',
-      duration: 8000
+      duration: 3000
     });
     toast.present();
   }
