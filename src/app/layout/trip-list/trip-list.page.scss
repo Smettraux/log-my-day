@@ -9,3 +9,16 @@ ion-list {
 }
 
 
+ion-item-option{
+  margin-top: 20px;
+  &:last-child{
+    border-radius: 0 5px 5px 0;
+
+  }
+  &:first-child {
+    padding-left: 10px;
+    margin-left:-10px;
+  }
+}
+
+
