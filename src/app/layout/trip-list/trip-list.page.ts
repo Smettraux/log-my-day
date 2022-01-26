@@ -5,6 +5,8 @@ import { AuthService } from "src/app/auth/auth.service";
 import { TripService } from "src/app/services/trip.service";
 import { environment } from "src/environments/environment";
 import { Trip } from "src/app/models/trip";
+import { Router } from "@angular/router";
+
 
 @Component({
   selector: 'app-trip-list',
@@ -20,7 +22,8 @@ export class TripListPage implements ViewDidEnter  {
     private auth: AuthService,
     // Inject the HTTP client
     public http: HttpClient,
-    private tripService: TripService
+    private tripService: TripService,
+    private router: Router
   ) {}
 
   ionViewDidEnter(): void {
@@ -35,6 +38,14 @@ export class TripListPage implements ViewDidEnter  {
     this.http.get(url).subscribe((trips) => {
       console.log(`Trips loaded`, trips);
     });*/
+
+
   }
 
+  // Add a method to log out.
+  logOut() {
+    console.log("logging out...");
+    this.auth.logOut();
+    this.router.navigateByUrl("/login");
+  }
 }
