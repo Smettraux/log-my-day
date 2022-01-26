@@ -34,7 +34,7 @@ const routes: Routes = [
       },
       {
         // Route that loads the EditList module
-        path: "edit-trip",
+        path: "edit-trip/:id",
         loadChildren: () =>
           import("./edit-trip/edit-trip.module").then(
             (m) => m.EditTripPageModule

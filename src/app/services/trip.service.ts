@@ -21,6 +21,30 @@ export class TripService {
     .pipe(map(this.convertTripResponseToTrip));
   }
 
+  getTrip(id: string): Observable<Trip> {
+    const url = `${API_URL}/trips?id=${id}`;
+    return this.http
+    .get<TripResponse>(url)
+    .pipe(map((trip) => {
+      let tripToReturn: Trip = {
+        id: trip[0].id,
+        title: trip[0].title,
+        description: trip[0].description,
+        createdAt: trip[0].createdAt,
+      }
+      return tripToReturn;
+    }
+      
+    ));
+    
+  } 
+
+  editTrip(id: string, trip: TripToAdd): Observable<Trip> {
+    console.log(id);
+    console.log(trip);
+    return this.http.patch<Trip>(`${API_URL}/trips/${id}`, trip);
+  }
+
   deleteTrip(id: string): Observable<void> {
     return this.http.delete<void>(`${API_URL}/trips/${id}`);
   }
