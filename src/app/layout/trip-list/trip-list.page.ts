@@ -3,7 +3,6 @@ import { HttpClient } from "@angular/common/http";
 import { ViewDidEnter } from "@ionic/angular";
 import { AuthService } from "src/app/auth/auth.service";
 import { TripService } from "src/app/services/trip.service";
-import { environment } from "src/environments/environment";
 import { Trip } from "src/app/models/trip";
 import { Router } from "@angular/router";
 
@@ -16,7 +15,7 @@ import { Router } from "@angular/router";
 export class TripListPage implements ViewDidEnter  {
 
   trips: Trip[] = [];
-  searchingText: string;;
+  searchingText: string;
 
   constructor(
     // Inject the AuthService
@@ -36,19 +35,12 @@ export class TripListPage implements ViewDidEnter  {
       this.trips = trips;
       console.log("Trips:" + this.trips);
     }, err => {
-      console.warn('Could not get new joke', err);
+      console.warn('Could not get trips', err);
     });
   }
 
   search(){
     this.getTrips(this.searchingText);
-    // Make an HTTP request to retrieve the trips.
-    /*const url = `${environment.apiUrl}/trips`;
-    this.http.get(url).subscribe((trips) => {
-      console.log(`Trips loaded`, trips);
-    });*/
-
-
   }
 
   // Add a method to log out.
