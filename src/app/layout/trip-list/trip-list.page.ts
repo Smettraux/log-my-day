@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { ViewDidEnter, AlertController, IonItemSliding } from "@ionic/angular";
 import { AuthService } from "src/app/auth/auth.service";
@@ -7,6 +7,7 @@ import { Trip } from "src/app/models/trip";
 import { Router } from "@angular/router";
 import { Observable } from 'rxjs';
 import { ToastController } from '@ionic/angular';
+import { IonInfiniteScroll } from '@ionic/angular';
 
 
 @Component({
@@ -17,7 +18,9 @@ import { ToastController } from '@ionic/angular';
 export class TripListPage implements ViewDidEnter  {
 
   trips: Trip[] = [];
+  currentPage: number = 1;
   searchingText: string;
+  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   constructor(
     // Inject the AuthService
@@ -48,17 +51,34 @@ export class TripListPage implements ViewDidEnter  {
     this.getTrips();
   }
 
-  getTrips(search: string = ""): void {
-    this.tripService.getTrips(search).subscribe(trips => {
+  getTrips(): void {
+    this.tripService.getTrips(this.searchingText).subscribe(trips => {
       this.trips = trips;
-      console.log("Trips:" + this.trips);
     }, err => {
       console.warn('Could not get trips', err);
     });
   }
 
+  loadTrips(event) {
+    this.tripService.getTrips(this.searchingText,this.currentPage++).subscribe(trips => {
+      if(trips.length > 0){
+        this.trips = this.trips.concat(trips);
+        event.target.complete();
+      } else {
+        this.infiniteScroll.disabled = true;
+        event.target.complete();
+      }
+    }, err => {
+      console.warn('Could not get trips', err);
+    });
+  }
+
+  toggleInfiniteScroll() {
+    this.infiniteScroll.disabled = !this.infiniteScroll.disabled;
+  }
+
   search(){
-    this.getTrips(this.searchingText);
+    this.getTrips();
   }
 
   // Add a method to log out.
@@ -82,8 +102,7 @@ export class TripListPage implements ViewDidEnter  {
         {
           text: 'Delete',
           handler: () => {
-            this.tripService.deleteTrip(tripId).subscribe(back => {
-              console.log(back);
+            this.tripService.deleteTrip(tripId).subscribe(() => {
               this.trips = this.trips.filter(trip => trip.id !== tripId);
             }, err => {
               console.warn('Delete trip', err);

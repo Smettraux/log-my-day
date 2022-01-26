@@ -13,9 +13,10 @@ export class TripService {
 
   constructor(private http: HttpClient) { }
 
-  getTrips(search: string = ""): Observable<Trip[]> {
+  getTrips(search: string = "", page: number = 1): Observable<Trip[]> {
     
-    const url = search == "" ? `${API_URL}/trips` : `${API_URL}/trips?search=${search}&sort=createdAt&order=desc`;
+    const url = search == "" ? `${API_URL}/trips?pageSize=10&page=${page}&sort=-createdAt&order=asc` : `${API_URL}/trips?pageSize=10&page=${page}&search=${search}&sort=-createdAt&order=asc`;
+    console.log(url);
     return this.http
     .get<TripResponse[]>(url)
     .pipe(map(this.convertTripResponseToTrip));
@@ -26,7 +27,7 @@ export class TripService {
   }
 
   addTrip(trip: TripToAdd): Observable<Trip> {
-    return this.http.post<Trip>(`${API_URL}/trips?sort=createdAt&order=desc`, trip);
+    return this.http.post<Trip>(`${API_URL}/trips`, trip);
   }
 
   convertTripResponseToTrip(response: TripResponse[]): Trip[] {
