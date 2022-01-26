@@ -27,15 +27,15 @@
     <ion-row>
       <ion-col>
         <ion-list lines=none>
-          <ion-item-sliding *ngFor="let trip of trips" (click)="openTrip(trip)">
-            <ion-item>
+          <ion-item-sliding *ngFor="let trip of trips" #slidingItem>
+            <ion-item (click)="openTrip(trip)">
               <ion-label>
               <h2>{{ trip.title }}</h2>
               <p>{{ trip.description }}</p>
               </ion-label>
             </ion-item>
             <ion-item-options>
-              <ion-item-option color="danger">
+              <ion-item-option color="danger" (click)="showDeleteAlert(slidingItem,trip.title,trip.id)">
                 <ion-icon slot="end" name="trash"></ion-icon>
                 Delete
               </ion-item-option>

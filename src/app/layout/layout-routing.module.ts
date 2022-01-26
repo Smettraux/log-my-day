@@ -38,7 +38,11 @@ const routes: Routes = [
         pathMatch: "full",
       },
     ],
+  },  {
+    path: 'edit-trip',
+    loadChildren: () => import('./edit-trip/edit-trip.module').then( m => m.EditTripPageModule)
   }
+
 ];
 
 @NgModule({

@@ -38,9 +38,10 @@ export class CreateTripPage implements OnInit {
       "description": this.description
     }
     this.tripService.addTrip(tripToAdd).subscribe(trip => {
-      console.log(trip);
+      this.router.navigate(['/trip-list'], { state: { show: "true" } });
+      this.title=this.description="";
     }, err => {
-      console.warn("Impossible d'ajouter un voyage", err);
+      console.warn("Impossible to add", err);
     });
   }
   

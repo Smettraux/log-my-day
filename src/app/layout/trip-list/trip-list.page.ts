@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { ViewDidEnter } from "@ionic/angular";
+import { ViewDidEnter, AlertController, IonItemSliding } from "@ionic/angular";
 import { AuthService } from "src/app/auth/auth.service";
 import { TripService } from "src/app/services/trip.service";
-import { environment } from "src/environments/environment";
 import { Trip } from "src/app/models/trip";
 import { Router } from "@angular/router";
+import { Observable } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 
 @Component({
@@ -16,7 +17,7 @@ import { Router } from "@angular/router";
 export class TripListPage implements ViewDidEnter  {
 
   trips: Trip[] = [];
-  searchingText: string;;
+  searchingText: string;
 
   constructor(
     // Inject the AuthService
@@ -24,8 +25,24 @@ export class TripListPage implements ViewDidEnter  {
     // Inject the HTTP client
     public http: HttpClient,
     private tripService: TripService,
-    private router: Router
-  ) {}
+    private router: Router,
+    public alertController: AlertController,
+    public toastController: ToastController
+  ) {
+    // Toast if a trip has been created
+    const { show } = window.history.state;
+    if (show == "true") {
+      this.presentToast();
+    } 
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Your trip has been added successfully',
+      duration: 3000
+    });
+    toast.present();
+  }
 
   ionViewDidEnter(): void {
     this.getTrips();
@@ -36,19 +53,12 @@ export class TripListPage implements ViewDidEnter  {
       this.trips = trips;
       console.log("Trips:" + this.trips);
     }, err => {
-      console.warn('Could not get new joke', err);
+      console.warn('Could not get trips', err);
     });
   }
 
   search(){
     this.getTrips(this.searchingText);
-    // Make an HTTP request to retrieve the trips.
-    /*const url = `${environment.apiUrl}/trips`;
-    this.http.get(url).subscribe((trips) => {
-      console.log(`Trips loaded`, trips);
-    });*/
-
-
   }
 
   // Add a method to log out.
@@ -56,5 +66,34 @@ export class TripListPage implements ViewDidEnter  {
     console.log("logging out...");
     this.auth.logOut();
     this.router.navigateByUrl("/login");
+  }
+
+  showDeleteAlert(slidingItem: IonItemSliding,tripName: string, tripId: string) {
+    this.alertController.create({
+      header: 'Delete "' + tripName + '" ?',
+      message: 'The trip will not be available anymore.',
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: () => {
+            slidingItem.closeOpened();
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.tripService.deleteTrip(tripId).subscribe(back => {
+              console.log(back);
+              this.trips = this.trips.filter(trip => trip.id !== tripId);
+            }, err => {
+              console.warn('Delete trip', err);
+            });
+            slidingItem.closeOpened();
+          }
+        }
+      ]
+    }).then(res => {
+      res.present();
+    });
   }
 }
