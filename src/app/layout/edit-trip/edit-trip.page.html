@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>CreateTrip</ion-title>
+    <ion-title>EditTrip</ion-title>
 
     <!-- Logout button -->
     <ion-buttons slot="end">
@@ -14,11 +14,11 @@
 <ion-content>
     <ion-grid>
       <ion-row>
-        <ion-col><h1>ADD TRIP</h1></ion-col>
+        <ion-col><h1>EDIT TRIP</h1></ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-    <form (submit)="addTrip()">
+    <form (submit)="editTrip()">
       <ion-list lines="none">
         <!-- Title input -->
         <ion-item>
@@ -36,7 +36,7 @@
         <!-- Description input -->
         <ion-item>
           <ion-label position="floating">Description</ion-label>
-          <ion-textarea
+          <ion-textarea 
             rows="8"
             [(ngModel)]="description"
             name="description"
@@ -47,7 +47,7 @@
 
       <div class="ion-padding">
         <!-- Create button -->
-        <ion-button expand="block" type="submit">Create</ion-button>
+        <ion-button type="submit">Edit</ion-button>
       </div>
     </form>
   </ion-col>

@@ -39,7 +39,7 @@
                 <ion-icon slot="end" name="trash"></ion-icon>
                 Delete
               </ion-item-option>
-              <ion-item-option color="secondary">
+              <ion-item-option color="secondary" [routerLink]="['/edit-trip/', trip.id]">
                 <ion-icon slot="end" name="pencil"></ion-icon>
                 Edit
               </ion-item-option>
