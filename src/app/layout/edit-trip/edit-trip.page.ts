@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router,  ActivatedRoute, ParamMap } from "@angular/router";
 import { AuthService } from "src/app/auth/auth.service";
 import { TripService } from "src/app/services/trip.service";
 import { environment } from "src/environments/environment";
@@ -19,10 +19,21 @@ export class EditTripPage implements OnInit {
     private auth: AuthService,
     // Inject the router
     private router: Router,
-    private tripService: TripService
+    private tripService: TripService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    const tripId = this.route.snapshot.paramMap.get('id');
+    console.log(tripId);
+    const trip = this.tripService.getTrip(tripId).subscribe(trip => {
+      this.title=trip.title;
+      this.description=trip.description;
+      console.log(trip);
+    }, err => {
+      console.warn("Impossible to edit", err)
+    });
+    
   }
 
   // Add a method to log out.
@@ -33,15 +44,16 @@ export class EditTripPage implements OnInit {
   }
 
   editTrip():void {
+    const tripId = this.route.snapshot.paramMap.get('id');
     let tripToAdd:TripToAdd = {
       "title": this.title,
       "description": this.description
     }
-    this.tripService.addTrip(tripToAdd).subscribe(trip => {
+    this.tripService.editTrip(tripId, tripToAdd).subscribe(trip => {
       this.router.navigate(['/trip-list'], { state: { show: "true" } });
       this.title=this.description="";
     }, err => {
-      console.warn("Impossible to add", err);
+      console.warn("Impossible to edit", err);
     });
   }
 
