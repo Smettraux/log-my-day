@@ -14,6 +14,7 @@ import { Trip } from "src/app/models/trip";
 export class TripListPage implements ViewDidEnter  {
 
   trips: Trip[] = [];
+  searchingText: string;;
 
   constructor(
     // Inject the AuthService
@@ -24,17 +25,20 @@ export class TripListPage implements ViewDidEnter  {
   ) {}
 
   ionViewDidEnter(): void {
-    this.tripService.getTrips().subscribe(trips => {
+    this.getTrips();
+  }
+
+  getTrips(search: string = ""): void {
+    this.tripService.getTrips(search).subscribe(trips => {
       this.trips = trips;
       console.log("Trips:" + this.trips);
     }, err => {
       console.warn('Could not get new joke', err);
     });
-    // Make an HTTP request to retrieve the trips.
-    /*const url = `${environment.apiUrl}/trips`;
-    this.http.get(url).subscribe((trips) => {
-      console.log(`Trips loaded`, trips);
-    });*/
+  }
+
+  search(){
+    this.getTrips(this.searchingText);
   }
 
 }

@@ -13,7 +13,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-searchbar class="searchbar" placeholder="Search" (ionChange)="search($event)"></ion-searchbar>
+        <ion-searchbar class="searchbar" placeholder="Search" debounce="700" (ionChange)="search()" [(ngModel)]="searchingText"></ion-searchbar>
       </ion-col>
     </ion-row>
     <ion-row>
