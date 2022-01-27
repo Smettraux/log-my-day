@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { Observable } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { IonInfiniteScroll } from '@ionic/angular';
+import { Geolocation } from '@capacitor/geolocation';
 
 
 @Component({

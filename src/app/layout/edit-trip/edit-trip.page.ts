@@ -29,7 +29,6 @@ export class EditTripPage implements OnInit {
     const trip = this.tripService.getTrip(tripId).subscribe(trip => {
       this.title=trip.title;
       this.description=trip.description;
-      console.log(trip);
     }, err => {
       console.warn("Impossible to edit", err)
     });
