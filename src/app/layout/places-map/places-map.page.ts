@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from '@angular/router';"@angular/router";
 import { AuthService } from "src/app/auth/auth.service";
 import * as L from 'leaflet';
 import { marker } from 'leaflet';
@@ -24,6 +24,7 @@ export class PlacesMapPage implements OnInit {
   places: Place[] = [];
 
 
+
   constructor(
      // Inject the authentication provider.
      private auth: AuthService,
@@ -31,13 +32,10 @@ export class PlacesMapPage implements OnInit {
      private router: Router,
      public http: HttpClient,
 
-     private placeService: PlaceService
+     private placeService: PlaceService,
+     private route: ActivatedRoute,
 
-  ) { this.mapMarkers = [
-    marker([ 46.778186, 6.641524 ], { icon: defaultIcon }),
-    marker([ 46.780796, 6.647395 ], { icon: defaultIcon }),
-    marker([ 46.784992, 6.652267 ], { icon: defaultIcon })
-  ]; }
+  ) { this.mapMarkers = []; }
 
   ngOnInit() {
 
@@ -73,7 +71,9 @@ export class PlacesMapPage implements OnInit {
   }
 
   getPlaces(): void {
-    this.placeService.getPlaces().subscribe(places => {
+    const tripId = this.route.snapshot.paramMap.get('id');
+
+    this.placeService.getPlaces(tripId).subscribe(places => {
       this.places = places;
       console.log(this.places);
 

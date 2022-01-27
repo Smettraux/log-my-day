@@ -37,7 +37,7 @@ export class TripListPage implements ViewDidEnter  {
     const { show } = window.history.state;
     if (show == "true") {
       this.presentToast();
-    } 
+    }
   }
 
   async presentToast() {
@@ -120,4 +120,9 @@ export class TripListPage implements ViewDidEnter  {
       res.present();
     });
   }
+
+  // openTrip(tripId: string) {
+  //   console.log("openTrip ", tripId);
+  //   this.router.navigateByUrl("/places-map", { state: { tripId: tripId } });
+  // }
 }
