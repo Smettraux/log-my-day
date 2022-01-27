@@ -20,7 +20,16 @@
 
 <ion-content>
     <div id='map' class="map" leaflet [leafletOptions]="mapOptions"
-    (leafletMapReady)="onMapReady($event)"></div>
-
-
+    (leafletMapReady)="onMapReady($event)" [leafletLayers]="mapMarkers"
+    ></div>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+      <img src="http://placehold.it/150x150" alt="">
+        </ion-col>
+        <ion-col>
+          <ion-label>POULET</ion-label>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 </ion-content>
