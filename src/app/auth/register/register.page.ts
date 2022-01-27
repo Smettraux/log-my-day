@@ -3,6 +3,7 @@ import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { AuthService } from "../auth.service";
+import { AuthRequest } from "../../models/auth-request";
 import { RegisterRequest } from "../../models/register-request";
 import { RegisterRequestApi} from "../../models/register-request-api";
 
@@ -50,17 +51,23 @@ export class RegisterPage implements OnInit {
       // Hide any previous registering error.
       this.registerError = false;
 
-      let newUser: RegisterRequestApi = {
+        let newUser: RegisterRequestApi = {
           "name": this.registerRequest.username,
           "password": this.registerRequest.password,
          }
 
-         console.log(newUser);
-
-
          this.auth.register$(newUser).subscribe( newUser => {
-            console.log(newUser);
-            this.router.navigateByUrl("/login");
+          let authRequest: AuthRequest = {
+            username: newUser.name,
+            password: this.registerRequest.password,
+          }
+          this.auth.logIn$(authRequest).subscribe({
+            next: () => this.router.navigateByUrl("/"),
+            error: (err) => {
+              //this.loginError = true;
+              console.warn(`Authentication failed: ${err.message}`);
+            },
+          });
          });
 
     }

@@ -21,6 +21,7 @@ export class TripListPage implements ViewDidEnter  {
   trips: Trip[] = [];
   currentPage: number = 1;
   searchingText: string;
+  userId: string;
   @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
 
   constructor(
@@ -49,11 +50,20 @@ export class TripListPage implements ViewDidEnter  {
   }
 
   ionViewDidEnter(): void {
-    this.getTrips();
+    this.auth.getUser$().subscribe(user => {
+      
+      if(typeof user !== "undefined") {
+        this.userId = user.id;
+        this.getTrips();
+      } else {
+        
+        this.trips = [];
+      }
+    });
   }
 
   getTrips(): void {
-    this.tripService.getTrips(this.searchingText).subscribe(trips => {
+    this.tripService.getTrips(this.userId,this.searchingText).subscribe(trips => {
       this.trips = trips;
     }, err => {
       console.warn('Could not get trips', err);
@@ -61,7 +71,7 @@ export class TripListPage implements ViewDidEnter  {
   }
 
   loadTrips(event) {
-    this.tripService.getTrips(this.searchingText,this.currentPage++).subscribe(trips => {
+    this.tripService.getTrips(this.userId,this.searchingText,this.currentPage++).subscribe(trips => {
       if(trips.length > 0){
         this.trips = this.trips.concat(trips);
         event.target.complete();
@@ -84,7 +94,6 @@ export class TripListPage implements ViewDidEnter  {
 
   // Add a method to log out.
   logOut() {
-    console.log("logging out...");
     this.auth.logOut();
     this.router.navigateByUrl("/login");
   }
