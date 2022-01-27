@@ -13,8 +13,8 @@ export class PlaceService {
 
   constructor(private http: HttpClient) { }
 
-  getPlaces(search: string ="") : Observable<Place[]> {
-    const url = `${API_URL}/places` ;
+  getPlaces(tripId : string) : Observable<Place[]> {
+    const url = `${API_URL}/places?trip=${tripId}`;
     return this.http
     .get<PlaceResponse[]>(url)
     .pipe(map(this.convertPlaceResponseToPlace));
