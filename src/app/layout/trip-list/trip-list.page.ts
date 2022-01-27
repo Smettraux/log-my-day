@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { Observable } from 'rxjs';
 import { ToastController } from '@ionic/angular';
 import { IonInfiniteScroll } from '@ionic/angular';
+import { Geolocation } from '@capacitor/geolocation';
 
 
 @Component({
@@ -86,6 +87,10 @@ export class TripListPage implements ViewDidEnter  {
     console.log("logging out...");
     this.auth.logOut();
     this.router.navigateByUrl("/login");
+  }
+
+  addTripPage() {
+    console.log("Add a trip")
   }
 
   showDeleteAlert(slidingItem: IonItemSliding,tripName: string, tripId: string) {

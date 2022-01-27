@@ -1,11 +1,17 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>TripList</ion-title>
+    <ion-title></ion-title>
 
     <!-- Logout button -->
     <ion-buttons slot="start">
       <ion-button (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/create-trip']" router-direction="forward">
+        <ion-icon name="add-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
 

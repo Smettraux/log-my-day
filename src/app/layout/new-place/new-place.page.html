@@ -1,9 +1,70 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>NewPlace</ion-title>
+    <ion-title>CreatePlace</ion-title>
+
+    <!-- Logout button -->
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="['/places-map']">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <p>RETOUR</p>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="logOut()">
+        <ion-icon name="log-out"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col><h1>ADD PLACE</h1></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+    <form (submit)="addTrip()">
+      <ion-list lines="none">
+        <!-- Title input -->
+        <ion-item>
+          <ion-label position="floating">Title</ion-label>
+          <ion-input
+            inputmode="text"
+            required="true"
+            name="title"
+            [(ngModel)]="title"
+            required
+          ></ion-input>
+        </ion-item>
 
+
+        <!-- Description input -->
+        <ion-item>
+          <ion-label position="floating">Description</ion-label>
+          <ion-textarea
+          rows="8"
+          [(ngModel)]="description"
+          name="description"
+          required
+          ></ion-textarea>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding">
+        <ion-label position="floating">Position</ion-label>
+        <ion-button color="light" expand="block" type="submit">Find me...</ion-button>
+      </div>
+      <div class="ion-padding">
+        <ion-label position="floating">Photo</ion-label>
+        <ion-button color="light" expand="block" type="submit">Take a picture...</ion-button>
+      </div>
+      
+      <div class="ion-padding">
+        <!-- Create button -->
+        <ion-button expand="block" type="submit" disabled>Create</ion-button>
+      </div>
+    </form>
+  </ion-col>
+  </ion-row>
+    </ion-grid>
 </ion-content>

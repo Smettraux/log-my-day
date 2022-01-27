@@ -41,20 +41,20 @@ const routes: Routes = [
           ),
       },
       {
+        // Route that loads the EditList module
+        path: "new-place",
+        loadChildren: () =>
+          import("./new-place/new-place.module").then(
+            (m) => m.NewPlacePageModule
+          ),
+      },
+      {
         path: "",
         redirectTo: "trip-list", // Or whatever tabs is your default one
         pathMatch: "full",
       },
     ],
-  },
-  {
-    path: 'edit-trip',
-    loadChildren: () => import('./edit-trip/edit-trip.module').then( m => m.EditTripPageModule)
-  },
-  {
-    path: 'new-place',
-    loadChildren: () => import('./new-place/new-place.module').then( m => m.NewPlacePageModule)
-  },
+  }
 
 ];
 
