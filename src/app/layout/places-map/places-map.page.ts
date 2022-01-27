@@ -5,6 +5,9 @@ import * as L from 'leaflet';
 import { marker } from 'leaflet';
 import { map } from 'rxjs/operators';
 import { defaultIcon } from './default-marker';
+import { Place } from 'src/app/models/place';
+import { PlaceService } from 'src/app/services/place.service';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -18,20 +21,22 @@ export class PlacesMapPage implements OnInit {
 
   mapOptions: L.MapOptions;
   mapMarkers: L.Marker[];
+  places: Place[] = [];
+
 
   constructor(
      // Inject the authentication provider.
      private auth: AuthService,
      // Inject the router
-     private router: Router
+     private router: Router,
+     public http: HttpClient,
+
+     private placeService: PlaceService
 
   ) { this.mapMarkers = [
     marker([ 46.778186, 6.641524 ], { icon: defaultIcon }),
     marker([ 46.780796, 6.647395 ], { icon: defaultIcon }),
-    marker([ 46.784992, 6.652267 ], { icon: defaultIcon }).on('click', () => {
-
-
-    })
+    marker([ 46.784992, 6.652267 ], { icon: defaultIcon })
   ]; }
 
   ngOnInit() {
@@ -46,9 +51,11 @@ export class PlacesMapPage implements OnInit {
 	      accessToken: 'Qy4o8rKKQH1B0VonlkbHYnzwlBmzfvZUyRaIck3J7IXCGWA6CDElbCNDE2m4uPzh'
           })
       ],
-      zoom: 13,
+      zoom: 5,
       center: L.latLng(46.778186, 6.641524)
     };
+
+    this.getPlaces();
   }
 
 
@@ -63,11 +70,46 @@ export class PlacesMapPage implements OnInit {
     setTimeout(() => {
        map.invalidateSize();}
     , 550);
-
-
-    console.log("map is ready");
   }
 
+  getPlaces(): void {
+    this.placeService.getPlaces().subscribe(places => {
+      this.places = places;
+      console.log(this.places);
 
+      console.log("Gentlemen, we got'em!");
+
+      this.places.forEach(place => {
+
+        let latitude = place.location.coordinates[0];
+        let longitude = place.location.coordinates[1];
+
+        this.mapMarkers.push(
+          marker([latitude, longitude], { icon: defaultIcon }).on('click', () => {
+            //popup with marker name
+            console.log(place.name);
+          })
+        );
+      });
+
+    }, err => {
+      console.warn('Could not get places', err);
+    });
+  }
+
+  setupMarkers() : void {
+    this.places.forEach(place => {
+
+      let latitude = place.location.coordinates[0];
+      let longitude = place.location.coordinates[1];
+
+      this.mapMarkers.push(
+        marker([latitude, longitude], { icon: defaultIcon }).on('click', () => {
+          //popup with marker name
+          console.log(place.name);
+        })
+      );
+    });
+  }
 
 }
