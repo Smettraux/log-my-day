@@ -16,7 +16,6 @@ export class TripService {
   getTrips(search: string = "", page: number = 1): Observable<Trip[]> {
     
     const url = search == "" ? `${API_URL}/trips?pageSize=10&page=${page}&sort=-createdAt&order=asc` : `${API_URL}/trips?pageSize=10&page=${page}&search=${search}&sort=-createdAt&order=asc`;
-    console.log(url);
     return this.http
     .get<TripResponse[]>(url)
     .pipe(map(this.convertTripResponseToTrip));
@@ -41,8 +40,6 @@ export class TripService {
   } 
 
   editTrip(id: string, trip: TripToAdd): Observable<Trip> {
-    console.log(id);
-    console.log(trip);
     return this.http.patch<Trip>(`${API_URL}/trips/${id}`, trip);
   }
 
