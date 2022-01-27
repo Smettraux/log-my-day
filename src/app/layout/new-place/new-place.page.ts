@@ -30,13 +30,10 @@ export class NewPlacePage implements OnInit {
     // Inject the router
     private router: Router,
     private placeService: PlaceService,
-<<<<<<< HEAD
     private route: ActivatedRoute,
 
-=======
     private pictureService: PictureService
-    
->>>>>>> 6cbfb89e1a67abc18b2adece2c2be9fd907684bd
+
   ) { }
 
   ngOnInit() {
