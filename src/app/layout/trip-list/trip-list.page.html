@@ -34,7 +34,7 @@
       <ion-col>
         <ion-list lines=none>
           <ion-item-sliding *ngFor="let trip of trips" #slidingItem>
-            <ion-item [routerLink]="['/places-map', {id:trip.id}]">
+            <ion-item (click)="placesMap(trip.id)">
               <ion-label>
               <h2>{{ trip.title }}</h2>
               <p>{{ trip.description }}</p>

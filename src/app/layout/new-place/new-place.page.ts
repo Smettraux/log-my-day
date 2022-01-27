@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { AuthService } from "src/app/auth/auth.service";
 import { PlaceService } from "src/app/services/place.service";
 import { Geolocation } from '@capacitor/geolocation';
@@ -18,8 +18,8 @@ export class NewPlacePage implements OnInit {
   latitude: number;
   longitude: number;
   coordinates: number[];
-  tripId: string = "a83d3e12-ec07-4961-a00f-a5f42f89b041";
-  tripHref: string = "/api/trips/a83d3e12-ec07-4961-a00f-a5f42f89b041";
+  tripId: string = this.ngOnInit();
+  // tripHref: string = "";
   pictureUrl: string = "testUrl1234567890";
 
   constructor(
@@ -28,10 +28,15 @@ export class NewPlacePage implements OnInit {
     // Inject the router
     private router: Router,
     private placeService: PlaceService,
-    
+    private route: ActivatedRoute,
+
   ) { }
 
   ngOnInit() {
+    const query = this.route.snapshot.queryParamMap.get('tripId');
+    console.log(query);
+    return query;
+
   }
 
   logOut() {
@@ -44,12 +49,14 @@ export class NewPlacePage implements OnInit {
     const coordinates = await Geolocation.getCurrentPosition();
     this.latitude = coordinates.coords.latitude;
     this.longitude = coordinates.coords.longitude;
-    
+
     console.log(this.latitude, this.longitude);
   };
 
 
-   
+  backToPlacesMap() {
+    this.router.navigate(['/places-map'],{queryParams: {tripId: this.ngOnInit()}} );
+  }
 
 
   addPlace():void {
@@ -62,7 +69,6 @@ export class NewPlacePage implements OnInit {
         "coordinates": [this.latitude, this.longitude]
       },
       "tripId": this.tripId,
-      "tripHref": this.tripHref,
       "pictureUrl": this.pictureUrl
     }
     console.log("test place", placeToAdd);

@@ -8,6 +8,7 @@ import { defaultIcon } from './default-marker';
 import { Place } from 'src/app/models/place';
 import { PlaceService } from 'src/app/services/place.service';
 import { HttpClient } from '@angular/common/http';
+import { ViewDidEnter } from '@ionic/angular';
 
 
 
@@ -17,7 +18,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './places-map.page.html',
   styleUrls: ['./places-map.page.scss'],
 })
-export class PlacesMapPage implements OnInit {
+export class PlacesMapPage implements OnInit, ViewDidEnter {
 
   mapOptions: L.MapOptions;
   mapMarkers: L.Marker[];
@@ -53,7 +54,11 @@ export class PlacesMapPage implements OnInit {
       center: L.latLng(46.778186, 6.641524)
     };
 
+  }
+
+  ionViewDidEnter(): void {
     this.getPlaces();
+    this.setupMarkers();
   }
 
 
@@ -71,14 +76,13 @@ export class PlacesMapPage implements OnInit {
   }
 
   getPlaces(): void {
-    const tripId = this.route.snapshot.paramMap.get('id');
+    const tripId = this.route.snapshot.queryParamMap.get('id');
+    console.log("test de log" + tripId);
+
+    this.places = [];
 
     this.placeService.getPlaces(tripId).subscribe(places => {
       this.places = places;
-      console.log(this.places);
-
-      console.log("Gentlemen, we got'em!");
-
       this.places.forEach(place => {
 
         let latitude = place.location.coordinates[0];
@@ -98,6 +102,8 @@ export class PlacesMapPage implements OnInit {
   }
 
   setupMarkers() : void {
+
+    this.mapMarkers = [] ;
     this.places.forEach(place => {
 
       let latitude = place.location.coordinates[0];
@@ -110,6 +116,11 @@ export class PlacesMapPage implements OnInit {
         })
       );
     });
+  }
+
+  newPlace(){
+    const tripId = this.route.snapshot.queryParamMap.get('id');
+    this.router.navigate(['/new-place'],{queryParams: {tripId: tripId}} );
   }
 
 }

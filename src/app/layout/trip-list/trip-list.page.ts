@@ -121,8 +121,8 @@ export class TripListPage implements ViewDidEnter  {
     });
   }
 
-  // openTrip(tripId: string) {
-  //   console.log("openTrip ", tripId);
-  //   this.router.navigateByUrl("/places-map", { state: { tripId: tripId } });
-  // }
+  placesMap(tripId) {
+    console.log("openTrip ", tripId);
+    this.router.navigate(["/places-map"],{queryParams: {id: tripId}} );
+  }
 }

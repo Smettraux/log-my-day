@@ -4,7 +4,7 @@
 
     <!-- Logout button -->
     <ion-buttons slot="start">
-      <ion-button [routerLink]="['/places-map']">
+      <ion-button (click)="backToPlacesMap()">
         <ion-icon name="arrow-back-outline"></ion-icon>
         <p>RETOUR</p>
       </ion-button>
@@ -58,7 +58,7 @@
         <ion-label position="floating">Photo</ion-label>
         <ion-button color="light" expand="block" type="submit" name="picture">Take a picture...</ion-button>
       </div>
-      
+
       <div class="ion-padding">
         <!-- Create button -->
         <ion-button (click)="addPlace()" expand="block" type="submit">Create</ion-button>
