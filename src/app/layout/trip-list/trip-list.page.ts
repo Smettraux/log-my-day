@@ -89,6 +89,10 @@ export class TripListPage implements ViewDidEnter  {
     this.router.navigateByUrl("/login");
   }
 
+  addTripPage() {
+    console.log("Add a trip")
+  }
+
   showDeleteAlert(slidingItem: IonItemSliding,tripName: string, tripId: string) {
     this.alertController.create({
       header: 'Delete "' + tripName + '" ?',
