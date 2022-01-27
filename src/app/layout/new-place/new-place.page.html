@@ -3,6 +3,12 @@
     <ion-title>CreatePlace</ion-title>
 
     <!-- Logout button -->
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="['/places-map']">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <p>RETOUR</p>
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
