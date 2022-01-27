@@ -27,6 +27,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
 
+
 *{
   font-family: 'Questrial', sans-serif;
 }
@@ -45,9 +46,6 @@ body{
   --icon-color	: var(--ion-color-tertiary-shade);
 }
 
-ion-item{
-  --background: var(--ion-color-tertiary);
-}
 
 h1{
   text-align: center;
