@@ -5,6 +5,8 @@ import { PlaceService } from "src/app/services/place.service";
 import { Geolocation } from '@capacitor/geolocation';
 import { environment } from "src/environments/environment";
 import { Place, PlaceToAdd, Location } from "src/app/models/place";
+import { PictureService } from 'src/app/picture/picture.service';
+import { QimgImage } from 'src/app/models/q-img-image';
 
 @Component({
   selector: 'app-new-place',
@@ -14,7 +16,7 @@ import { Place, PlaceToAdd, Location } from "src/app/models/place";
 export class NewPlacePage implements OnInit {
   name: string;
   description: string;
-  picture: string;
+  picture: QimgImage;
   latitude: number;
   longitude: number;
   coordinates: number[];
@@ -28,10 +30,17 @@ export class NewPlacePage implements OnInit {
     // Inject the router
     private router: Router,
     private placeService: PlaceService,
+    private pictureService: PictureService
     
   ) { }
 
   ngOnInit() {
+  }
+
+  takePicture() {
+    this.pictureService.takeAndUploadPicture().subscribe(picture => {
+      this.picture = picture;
+    });
   }
 
   logOut() {
