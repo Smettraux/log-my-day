@@ -6,6 +6,8 @@ import { AuthService } from "../auth.service";
 import { AuthRequest } from "../../models/auth-request";
 import { RegisterRequest } from "../../models/register-request";
 import { RegisterRequestApi} from "../../models/register-request-api";
+import { alertController } from '@ionic/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +15,8 @@ import { RegisterRequestApi} from "../../models/register-request-api";
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
+
+  errorMessage: string;
 
 
   ngOnInit() {
@@ -31,7 +35,9 @@ export class RegisterPage implements OnInit {
      */
     registerError: boolean;
 
-    constructor(private auth: AuthService, private router: Router) {
+    constructor(private auth: AuthService,
+      private router: Router,
+      public alertController: AlertController) {
       this.registerRequest = {
         username: undefined,
         password: undefined,
@@ -63,12 +69,33 @@ export class RegisterPage implements OnInit {
           this.auth.logIn$(authRequest).subscribe({
             next: () => this.router.navigateByUrl("/"),
             error: (err) => {
-              //this.loginError = true;
-              console.warn(`Authentication failed: ${err.message}`);
-            },
+                //the is just created. The only error could be a network one
+                this.showNetworkPopUpAlert();
+            }
           });
+         }, err => {
+          if(err.type === "UNAUTHORIZED") {
+            this.errorMessage = "invalid username or password."
+            this.registerError = true;
+          } else if(err.type === "UNIQUE") {
+            this.errorMessage = err.message;
+            this.registerError = true;
+          } else {
+            this.showNetworkPopUpAlert();
+          }
+          console.warn(err);
          });
 
+    }
+
+    showNetworkPopUpAlert(): void {
+      this.alertController.create({
+        header: 'Network issue',
+        message: 'The request cannot be made to the server. Please check your connection and try again.',
+        buttons: ['OK'],
+      }).then(res => {
+        res.present();
+      });
     }
 
 }

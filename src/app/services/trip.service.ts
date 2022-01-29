@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Trip, TripResponse, TripToAdd } from '../models/trip';
-import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from "src/environments/environment";
 import { catchError, map } from 'rxjs/operators';
+import { RequestError } from '../models/request-error';
 
 const API_URL = environment.apiUrl;
 @Injectable({
@@ -18,7 +19,9 @@ export class TripService {
     const url = search == "" ? `${API_URL}/trips?user=${userId}&pageSize=10&page=${page}&sort=-createdAt&order=asc` : `${API_URL}/trips?user=${userId}&pageSize=10&page=${page}&search=${search}&sort=-createdAt&order=asc`;
     return this.http
     .get<TripResponse[]>(url)
-    .pipe(map(this.convertTripResponseToTrip));
+    .pipe(map(this.convertTripResponseToTrip),
+      catchError(this.handleError)
+    );
   }
 
   getTrip(id: string): Observable<Trip> {
@@ -35,20 +38,27 @@ export class TripService {
       return tripToReturn;
     }
       
-    ));
+    ),
+    catchError(this.handleError));
     
   } 
 
   editTrip(id: string, trip: TripToAdd): Observable<Trip> {
-    return this.http.patch<Trip>(`${API_URL}/trips/${id}`, trip);
+    return this.http.patch<Trip>(`${API_URL}/trips/${id}`, trip).pipe(
+      catchError(this.handleError)
+    );
   }
 
   deleteTrip(id: string): Observable<void> {
-    return this.http.delete<void>(`${API_URL}/trips/${id}`);
+    return this.http.delete<void>(`${API_URL}/trips/${id}`).pipe(
+      catchError(this.handleError)
+    );
   }
 
   addTrip(trip: TripToAdd): Observable<Trip> {
-    return this.http.post<Trip>(`${API_URL}/trips`, trip);
+    return this.http.post<Trip>(`${API_URL}/trips`, trip).pipe(
+      catchError(this.handleError)
+    );
   }
 
   convertTripResponseToTrip(response: TripResponse[]): Trip[] {
@@ -64,6 +74,26 @@ export class TripService {
       );
     })
     return trips;
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    let error:RequestError; 
+    if (err.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      error = {
+        type: "NETWORK",
+        message: "Servers unreachable. Please verify your connection and try again !"
+      }
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      error = {
+        type: "UNAUTHORIZED",
+        message: err.error
+      }
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(error);
   }
 }
 

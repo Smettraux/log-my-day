@@ -1,7 +1,7 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { ReplaySubject, Observable, from } from "rxjs";
-import { delayWhen, map } from "rxjs/operators";
+import { ReplaySubject, Observable, from, throwError } from "rxjs";
+import { catchError, delayWhen, map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 
 import { AuthResponse } from "../models/auth-response";
@@ -9,6 +9,7 @@ import { User } from "../models/user";
 import { AuthRequest } from "../models/auth-request";
 import { Storage } from "@ionic/storage-angular";
 import { RegisterRequestApi } from "../models/register-request-api";
+import { RequestError } from "../models/request-error";
 
 /**
  * Authentication service for login/logout.
@@ -44,7 +45,9 @@ export class AuthService {
 
   register$(registerRequest: RegisterRequestApi): Observable<User> {
     const registerUrl = `${environment.apiUrl}/users`;
-    return this.http.post<User>(registerUrl, registerRequest);
+    return this.http.post<User>(registerUrl, registerRequest).pipe(
+      catchError(this.handleError)
+    );
 
   }
 
@@ -58,7 +61,8 @@ export class AuthService {
         this.#auth$.next(auth);
         console.log(`User ${auth.user.name} logged in`);
         return auth.user;
-      })
+      }),
+      catchError(this.handleError)
     );
   }
 
@@ -66,5 +70,30 @@ export class AuthService {
     this.#auth$.next(null);
     // Remove the stored authentication from storage when logging out.
     this.storage.remove('auth');
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    let error:RequestError; 
+    if (err.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      error = {
+        type: "NETWORK",
+        message: "Servers unreachable. Please verify your connection and try again !"
+      }
+    } else if(err.error.errors.name.kind == "unique"){
+      error = {
+        type: "UNIQUE",
+        message: "The username \"" + err.error.errors.name.value + "\" is already in use."
+      }
+    }else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      error = {
+        type: "UNAUTHORIZED",
+        message: err.error
+      }
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(error);
   }
 }

@@ -4,6 +4,9 @@ import { AuthService } from "src/app/auth/auth.service";
 import { TripService } from "src/app/services/trip.service";
 import { environment } from "src/environments/environment";
 import { Trip, TripToAdd } from "src/app/models/trip";
+import { alertController } from '@ionic/core';
+import { AlertController } from '@ionic/angular';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-trip',
@@ -13,6 +16,7 @@ import { Trip, TripToAdd } from "src/app/models/trip";
 export class EditTripPage implements OnInit {
   title: string;
   description: string;
+  tripError: boolean = false;
 
   constructor(
     // Inject the authentication provider.
@@ -20,7 +24,8 @@ export class EditTripPage implements OnInit {
     // Inject the router
     private router: Router,
     private tripService: TripService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public alertController: AlertController
   ) { }
 
   ngOnInit() {
@@ -30,7 +35,7 @@ export class EditTripPage implements OnInit {
       this.title=trip.title;
       this.description=trip.description;
     }, err => {
-      console.warn("Impossible to edit", err)
+        this.showNetworkPopUpAlert();
     });
     
   }
@@ -42,7 +47,13 @@ export class EditTripPage implements OnInit {
     this.router.navigateByUrl("/login");
   }
 
-  editTrip():void {
+  editTrip(editTripForm: NgForm) {
+    if (editTripForm.invalid) {
+      return;
+    }
+
+    // Hide any previous registering error.
+    this.tripError = false;
     const tripId = this.route.snapshot.paramMap.get('id');
     let tripToAdd:TripToAdd = {
       "title": this.title,
@@ -52,7 +63,21 @@ export class EditTripPage implements OnInit {
       this.router.navigate(['/trip-list'], { state: { show: "true" } });
       this.title=this.description="";
     }, err => {
-      console.warn("Impossible to edit", err);
+      if(err.type === "UNAUTHORIZED") {
+        this.tripError = true;
+      } else {
+        this.showNetworkPopUpAlert();
+      }
+    });
+  }
+
+  showNetworkPopUpAlert(): void {
+    this.alertController.create({
+      header: 'Network issue',
+      message: 'The request cannot be made to the server. Please check your connection and try again.',
+      buttons: ['OK'],
+    }).then(res => {
+      res.present();
     });
   }
 

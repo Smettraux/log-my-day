@@ -7,7 +7,9 @@ import { environment } from "src/environments/environment";
 import { Place, PlaceToAdd, Location } from "src/app/models/place";
 import { PictureService } from 'src/app/picture/picture.service';
 import { QimgImage } from 'src/app/models/q-img-image';
-import { ViewDidEnter } from '@ionic/angular';
+import { AlertController, ViewDidEnter } from '@ionic/angular';
+import { alertController } from '@ionic/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-new-place',
@@ -22,6 +24,7 @@ export class NewPlacePage implements OnInit, ViewDidEnter {
   longitude: number;
   coordinates: number[];
   tripId: string = "";
+  placeError: boolean = false;
   // tripHref: string = "";
   pictureUrl: string;
 
@@ -33,7 +36,8 @@ export class NewPlacePage implements OnInit, ViewDidEnter {
     private placeService: PlaceService,
     private route: ActivatedRoute,
 
-    private pictureService: PictureService
+    private pictureService: PictureService,
+    public alertController: AlertController
 
   ) {}
 
@@ -43,6 +47,9 @@ export class NewPlacePage implements OnInit, ViewDidEnter {
   }
 
   ionViewDidEnter() {
+    this.placeError = false;
+    this.name = "";
+    this.description = "";
     const query = this.route.snapshot.queryParamMap.get('tripId');
     this.tripId = query;
     return query;
@@ -73,7 +80,13 @@ export class NewPlacePage implements OnInit, ViewDidEnter {
   }
 
 
-  addPlace():void {
+  addPlace(addPlaceForm: NgForm) {
+    if (addPlaceForm.invalid) {
+      return;
+    }
+
+    // Hide any previous registering error.
+    this.placeError = false;
     let placeToAdd:PlaceToAdd = {
       "name": this.name,
       "description": this.description,
@@ -90,6 +103,16 @@ export class NewPlacePage implements OnInit, ViewDidEnter {
       this.picture=undefined;
     }, err => {
       console.warn("Impossible to add", err);
+    });
+  }
+
+  showNetworkPopUpAlert(): void {
+    this.alertController.create({
+      header: 'Network issue',
+      message: 'The request cannot be made to the server. Please check your connection and try again.',
+      buttons: ['OK'],
+    }).then(res => {
+      res.present();
     });
   }
 }

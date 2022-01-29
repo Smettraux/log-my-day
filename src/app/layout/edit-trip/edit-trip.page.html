@@ -24,7 +24,7 @@
     </ion-row>
     <ion-row>
       <ion-col>
-    <form (submit)="editTrip()">
+    <form #editTripForm="ngForm" (submit)="editTrip(editTripForm)">
       <ion-list lines="none">
         <!-- Title input -->
         <ion-item>
@@ -32,10 +32,17 @@
           <ion-input
             inputmode="text"
             required="true"
-            name="title"
+            name="titleInput"
+            minlength="3"
+            maxlength="100"
+            #titleInput="ngModel"
             [(ngModel)]="title"
-            required
           ></ion-input>
+        </ion-item>
+        <ion-item lines="none" *ngIf="titleInput.invalid && titleInput.touched">
+          <ion-text *ngIf="titleInput.errors?.['required']" color="danger">Title is required.</ion-text>
+          <ion-text *ngIf="titleInput.errors?.['minlength']" color="danger">Title must be at least 3 characters</ion-text>
+          <ion-text *ngIf="titleInput.errors?.['maxlength']" color="danger">Title must be lower or equal to 100 characters</ion-text>
         </ion-item>
 
 
@@ -44,16 +51,28 @@
           <ion-label position="floating">Description</ion-label>
           <ion-textarea
             rows="8"
+            required="true"
+            name="descriptionInput"
+            minlength="5"
+            maxlength="50000"
+            #descriptionInput="ngModel"
             [(ngModel)]="description"
             name="description"
-            required
           ></ion-textarea>
+        </ion-item>
+        <ion-item lines="none" *ngIf="descriptionInput.invalid && descriptionInput.touched">
+          <ion-text *ngIf="descriptionInput.errors?.['required']" color="danger">Description is required.</ion-text>
+          <ion-text *ngIf="descriptionInput.errors?.['minlength']" color="danger">Description must be at least 5 characters</ion-text>
+          <ion-text *ngIf="descriptionInput.errors?.['maxlength']" color="danger">Description must be lower or equal to 50000 characters</ion-text>
         </ion-item>
       </ion-list>
 
       <div class="ion-padding">
         <!-- Create button -->
-        <ion-button type="submit">Edit</ion-button>
+        <ion-button type="submit" [disabled]="editTripForm.invalid">Edit</ion-button>
+        <br>
+        <br>
+        <ion-text color="danger" *ngIf="tripError">Invalid title or description</ion-text>
       </div>
     </form>
   </ion-col>

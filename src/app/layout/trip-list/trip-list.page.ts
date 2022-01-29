@@ -66,7 +66,7 @@ export class TripListPage implements ViewDidEnter  {
     this.tripService.getTrips(this.userId,this.searchingText).subscribe(trips => {
       this.trips = trips;
     }, err => {
-      console.warn('Could not get trips', err);
+        this.showNetworkPopUpAlert();
     });
   }
 
@@ -80,7 +80,7 @@ export class TripListPage implements ViewDidEnter  {
         event.target.complete();
       }
     }, err => {
-      console.warn('Could not get trips', err);
+      this.showNetworkPopUpAlert();
     });
   }
 
@@ -119,7 +119,7 @@ export class TripListPage implements ViewDidEnter  {
             this.tripService.deleteTrip(tripId).subscribe(() => {
               this.trips = this.trips.filter(trip => trip.id !== tripId);
             }, err => {
-              console.warn('Delete trip', err);
+                this.showNetworkPopUpAlert();
             });
             slidingItem.closeOpened();
           }
@@ -133,5 +133,15 @@ export class TripListPage implements ViewDidEnter  {
   placesMap(tripId) {
     console.log("openTrip ", tripId);
     this.router.navigate(["/places-map"],{queryParams: {id: tripId}} );
+  }
+
+  showNetworkPopUpAlert(): void {
+    this.alertController.create({
+      header: 'Network issue',
+      message: 'The request cannot be made to the server. Please check your connection and try again.',
+      buttons: ['OK'],
+    }).then(res => {
+      res.present();
+    });
   }
 }

@@ -1,9 +1,11 @@
 import { Component } from "@angular/core";
 import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
+import { AlertController } from "@ionic/angular";
 
 import { AuthService } from "../auth.service";
 import { AuthRequest } from "../../models/auth-request";
+import { RequestError } from "src/app/models/request-error";
 
 /**
  * Login page.
@@ -25,7 +27,9 @@ export class LoginPage {
    */
   loginError: boolean;
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthService,
+    private router: Router,
+    public alertController: AlertController) {
     this.authRequest = {
       username: undefined,
       password: undefined,
@@ -47,10 +51,23 @@ export class LoginPage {
     // Perform the authentication request to the API.
     this.auth.logIn$(this.authRequest).subscribe({
       next: () => this.router.navigateByUrl("/"),
-      error: (err) => {
-        this.loginError = true;
-        console.warn(`Authentication failed: ${err.message}`);
+      error: (err:RequestError) => {
+        if(err.type === "UNAUTHORIZED") {
+          this.loginError = true;
+        } else {
+          this.showNetworkPopUpAlert();
+        }
       },
+    });
+  }
+
+  showNetworkPopUpAlert(): void {
+    this.alertController.create({
+      header: 'Network issue',
+      message: 'The request cannot be made to the server. Please check your connection and try again.',
+      buttons: ['OK'],
+    }).then(res => {
+      res.present();
     });
   }
 }

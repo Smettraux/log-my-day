@@ -8,8 +8,9 @@ import { defaultIcon } from './default-marker';
 import { Place } from 'src/app/models/place';
 import { PlaceService } from 'src/app/services/place.service';
 import { HttpClient } from '@angular/common/http';
-import { ViewDidEnter } from '@ionic/angular';
+import { AlertController, ViewDidEnter } from '@ionic/angular';
 import { TripService } from 'src/app/services/trip.service';
+import { alertController } from '@ionic/core';
 
 
 
@@ -36,6 +37,7 @@ export class PlacesMapPage implements OnInit, ViewDidEnter {
     private tripService: TripService,
     private placeService: PlaceService,
     private route: ActivatedRoute,
+    public alertController: AlertController
 
 
   ) { this.mapMarkers = [];}
@@ -89,6 +91,8 @@ export class PlacesMapPage implements OnInit, ViewDidEnter {
     this.tripService.getTrip(tripId).subscribe(trip => {
       this.tripTitle = trip.title;
       document.getElementById("title").textContent = this.tripTitle;
+    }, err => {
+        this.showNetworkPopUpAlert();
     });
 
 
@@ -103,9 +107,6 @@ export class PlacesMapPage implements OnInit, ViewDidEnter {
 
         this.mapMarkers.push(
           marker([latitude, longitude], { icon: defaultIcon }).on('click', () => {
-            //popup with marker name
-            console.log(place.name);
-
            document.getElementById("placeName").textContent = place.name;
            document.getElementById('imageWrapper').style.display = 'inline-block';
            document.getElementById('locationLabel').textContent = place.location.coordinates[0].toString() + ", " + place.location.coordinates[1].toString();
@@ -117,7 +118,7 @@ export class PlacesMapPage implements OnInit, ViewDidEnter {
       });
 
     }, err => {
-      console.warn('Could not get places', err);
+      this.showNetworkPopUpAlert();
     });
   }
 
@@ -144,12 +145,22 @@ export class PlacesMapPage implements OnInit, ViewDidEnter {
 
   newPlace(){
     const tripId = this.route.snapshot.queryParamMap.get('id');
-    this.router.navigate(['/new-place'],{queryParams: {tripId: tripId}} );
+    this.router.navigate(['/new-place'],{queryParams: {tripId: tripId}});
   }
 
   editPlace(){
     console.log("you cannot edit a place in this version :(");
     document.getElementById("editPlaceWrapper").style.display = 'none';
+  }
+
+  showNetworkPopUpAlert(): void {
+    this.alertController.create({
+      header: 'Network issue',
+      message: 'The request cannot be made to the server. Please check your connection and try again.',
+      buttons: ['OK'],
+    }).then(res => {
+      res.present();
+    });
   }
 
 }

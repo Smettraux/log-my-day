@@ -48,7 +48,7 @@
           <!-- Error message displayed if the register failed -->
           <br>
           <br>
-          <ion-text color="danger" *ngIf="registerError">Username or password is invalid.</ion-text>
+          <ion-text color="danger" *ngIf="registerError">{{ errorMessage }}</ion-text>
         </div>
       </form>
     </ion-col>
