@@ -69,37 +69,37 @@ Create `environment.ts` and paste the `environment.sample.ts` content inside (wi
 ### Authentification
 When you use the application for the first time, you will be taken to the login page. On this page you will be able to enter your username and password and then press the login button, unless you do not have an account yet. 
 
-<img src=".\src\assets\img\tuto\login.png" alt="login" style="zoom:25%;" />
+<img src=".\src\assets\img\tuto\login.png" alt="login" width="200" height="400" />
 
 In this case, you can click on "Register Page" at the bottom of the page to go to the registration form.
 
-<img src=".\src\assets\img\tuto\register.png" alt="register" style="zoom:25%;" />
+<img src=".\src\assets\img\tuto\register.png" alt="register" width="200" height="400" />
 
 To log out, you can click on the icon at the top left of the travel list page.
 
 ### Trip management <a name="trip">
 To create a trip, you must first be logged in, and then be on the page where the trips are displayed (you automatically arrive on this page when you log in).
 
-<img src=".\src\assets\img\tuto\list.png" alt="list" style="zoom:25%;" />
+<img src=".\src\assets\img\tuto\list.png" alt="list" width="200" height="400" />
 
 Then, by pressing the + icon at the top right of the screen, you will arrive at the form for adding a trip. On this form you will need to enter a title and description for the trip.
 
-<img src=".\src\assets\img\tuto\addTrip.png" alt="addTrip" style="zoom:25%;" />
+<img src=".\src\assets\img\tuto\addTrip.png" alt="addTrip" width="200" height="400"/>
 
 Once a trip has been added, you can edit or delete it by dragging it to the side. Both options will appear, and you can click on the one you want. You can also click on it to display its map with the different locations that make it up.
 
-<img src=".\src\assets\img\tuto\editTrip.png" alt="editTrip" style="zoom:25%;" />
+<img src=".\src\assets\img\tuto\editTrip.png" alt="editTrip" width="200" height="400"/>
 
 ### Adding a place <a name="place">
 To add a place to your trip, first click on it in the list to display its details with the map. On this new page, you can press the + icon at the top right of the screen.
 
-<img src=".\src\assets\img\tuto\addplaces.png" alt="addPlaces" style="zoom:25%;" />
+<img src=".\src\assets\img\tuto\addplaces.png" alt="addPlaces" width="200" height="400"/>
 
 Once on the add place form, you can fill it in with the name of the place, its description, authorise the application to take your coordinates (to then display the place on the map) and take a photo. Your place will then be displayed on the trip map, and by clicking on it you will be able to see its name, description and photo.
 
-<img src=".\src\assets\img\tuto\places.png" alt="places" style="zoom:25%;" />
+<img src=".\src\assets\img\tuto\places.png" alt="places" width="200" height="400" />
 
 ### Search trips <a name="search">
 You may create a number of trips, and the list will start to get very long. In this case, it is more interesting to use the search bar at the top of the page to find the right one quickly. The search will be performed on all the properties of the trip.
 
-<img src=".\src\assets\img\tuto\search.png" alt="search" style="zoom:25%;" />
+<img src=".\src\assets\img\tuto\search.png" alt="search" width="200" height="400" />
