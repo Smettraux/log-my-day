@@ -35,7 +35,6 @@ export class RegisterPage implements OnInit {
       this.registerRequest = {
         username: undefined,
         password: undefined,
-        confirmation: undefined,
       };
     }
 

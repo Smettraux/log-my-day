@@ -16,37 +16,28 @@
           <!-- Username input -->
           <ion-item>
             <ion-label position="floating">Username</ion-label>
-            <ion-input inputmode="text" #username="ngModel" required="true" name="username"
+            <ion-input inputmode="text" #username="ngModel" minlength="3" maxlength="25" required="true" name="username"
               [(ngModel)]="registerRequest.username"></ion-input>
           </ion-item>
 
           <!-- Error message displayed if the username is invalid -->
           <ion-item lines="none" *ngIf="username.invalid && username.touched">
-            <ion-text color="danger">Username is required.</ion-text>
+            <ion-text *ngIf="username.errors?.['required']" color="danger">Username is required.</ion-text>
+            <ion-text *ngIf="username.errors?.['minlength']" color="danger">Username must be at least 3 characters</ion-text>
+            <ion-text *ngIf="username.errors?.['maxlength']" color="danger">Username must be lower or equal to 25 characters</ion-text>
           </ion-item>
 
           <!-- Password input -->
           <ion-item>
             <ion-label position="floating">Password</ion-label>
-            <ion-input inputmode="text" #password="ngModel" required="true" type="password" name="password"
+            <ion-input inputmode="text" #password="ngModel" minlength="4" required="true" type="password" name="password"
               [(ngModel)]="registerRequest.password"></ion-input>
           </ion-item>
 
           <!-- Error message displayed if the password is invalid -->
           <ion-item lines="none" *ngIf="password.invalid && password.touched">
-            <ion-text color="danger">Password is required.</ion-text>
-          </ion-item>
-
-          <!-- Password confirmation -->
-          <ion-item>
-            <ion-label position="floating">Confirm password</ion-label>
-            <ion-input inputmode="text" #confirmation="ngModel" required="true" type="password" name="confirmation"
-              [(ngModel)]="registerRequest.confirmation"></ion-input>
-          </ion-item>
-
-          <!-- Error message displayed if the password is invalid -->
-          <ion-item lines="none" *ngIf="confirmation.touched && password.value !== confirmation.value">
-            <ion-text color="danger">Confirmation doesn't match password.</ion-text>
+            <ion-text *ngIf="password.errors?.['required']" color="danger">Password is required.</ion-text>
+            <ion-text *ngIf="password.errors?.['minlength']" color="danger">Password must be at least 4 characters</ion-text>
           </ion-item>
         </ion-list>
 
