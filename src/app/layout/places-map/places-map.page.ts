@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from '@angular/router';"@angular/router";
 import { AuthService } from "src/app/auth/auth.service";
 import * as L from 'leaflet';
 import { marker } from 'leaflet';
@@ -8,6 +8,8 @@ import { defaultIcon } from './default-marker';
 import { Place } from 'src/app/models/place';
 import { PlaceService } from 'src/app/services/place.service';
 import { HttpClient } from '@angular/common/http';
+import { ViewDidEnter } from '@ionic/angular';
+import { TripService } from 'src/app/services/trip.service';
 
 
 
@@ -17,27 +19,26 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './places-map.page.html',
   styleUrls: ['./places-map.page.scss'],
 })
-export class PlacesMapPage implements OnInit {
+export class PlacesMapPage implements OnInit, ViewDidEnter {
 
   mapOptions: L.MapOptions;
   mapMarkers: L.Marker[];
   places: Place[] = [];
+  tripTitle : string ;
 
 
   constructor(
-     // Inject the authentication provider.
-     private auth: AuthService,
-     // Inject the router
-     private router: Router,
-     public http: HttpClient,
+    // Inject the authentication provider.
+    private auth: AuthService,
+    // Inject the router
+    private router: Router,
+    public http: HttpClient,
+    private tripService: TripService,
+    private placeService: PlaceService,
+    private route: ActivatedRoute,
 
-     private placeService: PlaceService
 
-  ) { this.mapMarkers = [
-    marker([ 46.778186, 6.641524 ], { icon: defaultIcon }),
-    marker([ 46.780796, 6.647395 ], { icon: defaultIcon }),
-    marker([ 46.784992, 6.652267 ], { icon: defaultIcon })
-  ]; }
+  ) { this.mapMarkers = [];}
 
   ngOnInit() {
 
@@ -55,7 +56,18 @@ export class PlacesMapPage implements OnInit {
       center: L.latLng(46.778186, 6.641524)
     };
 
+  }
+
+
+
+  ionViewDidEnter(): void {
     this.getPlaces();
+    this.setupMarkers();
+    document.getElementById("placeName").textContent = "Select a place";
+    document.getElementById('imageWrapper').style.display = 'none';
+    document.getElementById('editPlaceWrapper').style.display = 'none';
+    document.getElementById('locationLabel').textContent = "";
+    document.getElementById('decriptionLabel').textContent = "";
   }
 
 
@@ -69,16 +81,21 @@ export class PlacesMapPage implements OnInit {
   onMapReady(map: L.Map) {
     setTimeout(() => {
        map.invalidateSize();}
-    , 550);
+    , 0);
   }
 
   getPlaces(): void {
-    this.placeService.getPlaces().subscribe(places => {
+    const tripId = this.route.snapshot.queryParamMap.get('id');
+    this.tripService.getTrip(tripId).subscribe(trip => {
+      this.tripTitle = trip.title;
+      document.getElementById("title").textContent = this.tripTitle;
+    });
+
+
+    this.places = [];
+
+    this.placeService.getPlaces(tripId).subscribe(places => {
       this.places = places;
-      console.log(this.places);
-
-      console.log("Gentlemen, we got'em!");
-
       this.places.forEach(place => {
 
         let latitude = place.location.coordinates[0];
@@ -88,6 +105,13 @@ export class PlacesMapPage implements OnInit {
           marker([latitude, longitude], { icon: defaultIcon }).on('click', () => {
             //popup with marker name
             console.log(place.name);
+
+           document.getElementById("placeName").textContent = place.name;
+           document.getElementById('imageWrapper').style.display = 'inline-block';
+           document.getElementById('locationLabel').textContent = place.location.coordinates[0].toString() + ", " + place.location.coordinates[1].toString();
+           document.getElementById('decriptionLabel').textContent = place.description;
+           place.pictureUrl ? document.getElementById('placeImage').setAttribute('src', place.pictureUrl) : document.getElementById('imageWrapper').setAttribute('style', 'display: none')
+
           })
         );
       });
@@ -98,6 +122,8 @@ export class PlacesMapPage implements OnInit {
   }
 
   setupMarkers() : void {
+
+    this.mapMarkers = [] ;
     this.places.forEach(place => {
 
       let latitude = place.location.coordinates[0];
@@ -106,10 +132,24 @@ export class PlacesMapPage implements OnInit {
       this.mapMarkers.push(
         marker([latitude, longitude], { icon: defaultIcon }).on('click', () => {
           //popup with marker name
-          console.log(place.name);
+          // console.log(place.name);
+
+          // //add a method to fill the dom element with place name
+          // document.getElementById("placeName").innerHTML = place.name;
+          // console.log("does it even work ?")
         })
       );
     });
+  }
+
+  newPlace(){
+    const tripId = this.route.snapshot.queryParamMap.get('id');
+    this.router.navigate(['/new-place'],{queryParams: {tripId: tripId}} );
+  }
+
+  editPlace(){
+    console.log("you cannot edit a place in this version :(");
+    document.getElementById("editPlaceWrapper").style.display = 'none';
   }
 
 }

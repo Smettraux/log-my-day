@@ -13,9 +13,9 @@ export class TripService {
 
   constructor(private http: HttpClient) { }
 
-  getTrips(search: string = "", page: number = 1): Observable<Trip[]> {
+  getTrips(userId:string,search: string = "", page: number = 1): Observable<Trip[]> {
     
-    const url = search == "" ? `${API_URL}/trips?pageSize=10&page=${page}&sort=-createdAt&order=asc` : `${API_URL}/trips?pageSize=10&page=${page}&search=${search}&sort=-createdAt&order=asc`;
+    const url = search == "" ? `${API_URL}/trips?user=${userId}&pageSize=10&page=${page}&sort=-createdAt&order=asc` : `${API_URL}/trips?user=${userId}&pageSize=10&page=${page}&search=${search}&sort=-createdAt&order=asc`;
     return this.http
     .get<TripResponse[]>(url)
     .pipe(map(this.convertTripResponseToTrip));

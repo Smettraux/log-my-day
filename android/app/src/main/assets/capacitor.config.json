@@ -1,0 +1,6 @@
+{
+	"appId": "com.websauce.travellog",
+	"appName": "Travel Log",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

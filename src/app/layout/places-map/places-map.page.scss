@@ -1,3 +1,29 @@
 #map{
   height:65vh;
 }
+
+#imageWrapper {
+  display: none;
+  min-width: 25vw;
+}
+
+#editPlaceWrapper{
+  display: none;
+}
+
+#placeName{
+  max-width: 20vw;
+  word-break: break-all;
+}
+
+ion-title{
+  padding-right: 60px;
+}
+
+h1{
+  text-align: center;
+}
+
+ion-grid{
+  padding-top: 0px;
+}

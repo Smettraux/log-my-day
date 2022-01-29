@@ -26,7 +26,6 @@ export type Place = {
     "description": string;
     "location": Location;
     "tripId": string;
-    "tripHref": string;
     "pictureUrl": string;
   }
 
