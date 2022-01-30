@@ -81,7 +81,10 @@
       </div>
       <div class="ion-padding">
         <!-- Create button -->
-        <ion-button expand="block" type="submit" [disabled]="addPlaceForm.invalid">Create</ion-button>
+        <ion-button expand="block" type="submit">Create</ion-button>   
+        <br>
+        <br>
+        <ion-text color="danger" *ngIf="placeError">Invalid name or description</ion-text>
       </div>
     </form>
   </ion-col>

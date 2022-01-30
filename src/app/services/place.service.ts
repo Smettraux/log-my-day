@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Place, PlaceResponse, PlaceToAdd } from '../models/place';
-import { Observable, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from "src/environments/environment";
 import { catchError, map } from 'rxjs/operators';
+import { RequestError } from '../models/request-error';
 
 const API_URL = environment.apiUrl;
 @Injectable({
@@ -17,7 +18,7 @@ export class PlaceService {
     const url = `${API_URL}/places?trip=${tripId}`;
     return this.http
     .get<PlaceResponse[]>(url)
-    .pipe(map(this.convertPlaceResponseToPlace));
+    .pipe(map(this.convertPlaceResponseToPlace),catchError(this.handleError));
   }
 
   getPlace(id: string): Observable<Place> {
@@ -36,7 +37,8 @@ export class PlaceService {
       }
       return placeToReturn;
     }
-    ));
+    ),
+    catchError(this.handleError));
   }
 
   addPlace(place: PlaceToAdd): Observable<Place> {
@@ -60,5 +62,25 @@ export class PlaceService {
       );
     });
     return places;
+  }
+
+  private handleError(err: HttpErrorResponse) {
+    let error:RequestError; 
+    if (err.status === 0) {
+      // A client-side or network error occurred. Handle it accordingly.
+      error = {
+        type: "NETWORK",
+        message: "Servers unreachable. Please verify your connection and try again !"
+      }
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      error = {
+        type: "UNAUTHORIZED",
+        message: err.error
+      }
+    }
+    // Return an observable with a user-facing error message.
+    return throwError(error);
   }
 }

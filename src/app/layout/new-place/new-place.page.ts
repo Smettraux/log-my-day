@@ -84,7 +84,6 @@ export class NewPlacePage implements OnInit, ViewDidEnter {
     if (addPlaceForm.invalid) {
       return;
     }
-
     // Hide any previous registering error.
     this.placeError = false;
     let placeToAdd:PlaceToAdd = {
@@ -102,7 +101,11 @@ export class NewPlacePage implements OnInit, ViewDidEnter {
       this.name=this.description="";
       this.picture=undefined;
     }, err => {
-      console.warn("Impossible to add", err);
+      if(err.type === "UNAUTHORIZED") {
+        this.placeError = true;
+      } else {
+        this.showNetworkPopUpAlert();
+      }
     });
   }
 
